@@ -85,7 +85,7 @@ public class CagedOgre extends Script implements Painting {
 
   private int ammoStack() {
     RSItem arrows = Equipment.getItem(Equipment.SLOTS.ARROW);
-    return arrows.getStack();
+    return (arrows != null && arrows.getStack());
   }
 
   private int cannonStack() {
