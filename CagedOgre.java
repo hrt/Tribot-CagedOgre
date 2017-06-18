@@ -32,13 +32,49 @@ public class CagedOgre extends Script implements Painting {
                                         , new RSTile(2529, 3370, 0)
 										                    , new RSTile(2528, 3369, 0)};
 
-  private RSTile CANNON_POSITION;
+  private RSTile CANNON_POSITION = new RSTile(2527, 3371, 0);
 
   private final int BROKEN_CANNON = 14916;
 
+  private final RSTile MIDPOINT = new RSTile(2519, 3354, 0);
+
+  private final int GATE = 2041;
+
+  private void setupCannon(RSTile position) {
+    moveToPosition(position);
+    RSItem[] cannon_bases = Inventory.find(CANNON_BASE);
+    for (RSItem cannon_base : cannon_bases) {
+      if (cannon_base != null) {
+        cannon_base.click("Set-Up");
+      }
+      sleep(8000 + rand.nextInt(50));
+      break;
+    }
+  }
+
+  private void openGate() {
+    RSObject gate = findNearest(20, GATE);
+    while (gate == null) {
+      gate = findNearest(20, GATE);
+    }
+    gate.click("Open");
+    sleep(7000 + rand.nextInt(50));
+  }
+
   private boolean onStart() {
     println("CagedOgre has started!");
+    if (Login.getLoginState() != Login.STATE.INGAME) {
+      Login.login();
+    }
+    while (!PathFinding.canReach(CANNON_POSITION, false)) {
+      moveToPosition(MIDPOINT);
+      openGate();
+    }
     RSObject cannon = findNearest(6, CANNON_BASE);
+    if (cannon == null) {
+      setupCannon(CANNON_POSITION);
+      cannon = findNearest(6, CANNON_BASE);
+    }
     if (cannon != null && cannon.isOnScreen()) {
       CANNON_POSITION = cannon.getPosition();
     } else {
@@ -54,6 +90,11 @@ public class CagedOgre extends Script implements Painting {
         sleep(loop());
       }
     }
+    RSObject cannon = findNearest(6, CANNON_BASE);
+    if (cannon != null && cannon.isOnScreen()) {
+      cannon.click("Pick-up");
+    }
+    Login.logout();
     Login.logout();
   }
 
@@ -85,7 +126,9 @@ public class CagedOgre extends Script implements Painting {
 
   private int ammoStack() {
     RSItem arrows = Equipment.getItem(Equipment.SLOTS.ARROW);
-    return (arrows != null && arrows.getStack());
+    if (arrows == null)
+      return -1;
+    return (arrows.getStack());
   }
 
   private int cannonStack() {
