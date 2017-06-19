@@ -8,6 +8,7 @@ import org.tribot.script.*;
 import org.tribot.script.interfaces.*;
 import org.tribot.api2007.*;
 import org.tribot.api2007.types.*;
+import org.tribot.api2007.WebWalking;
 
 import java.util.Random;
 
@@ -32,13 +33,17 @@ public class CagedOgre extends Script implements Painting {
                                         , new RSTile(2529, 3370, 0)
 										                    , new RSTile(2528, 3369, 0)};
 
-  private RSTile CANNON_POSITION = new RSTile(2527, 3371, 0);
+  private RSTile CANNON_POSITION = new RSTile(2528, 3371, 0);
 
   private final int BROKEN_CANNON = 14916;
 
   private final RSTile MIDPOINT = new RSTile(2519, 3354, 0);
 
   private final int GATE = 2041;
+
+  private final long startTime = System.currentTimeMillis();
+
+  private final int startXP = Skills.getXP(Skills.SKILLS.RANGED);
 
   private void setupCannon(RSTile position) {
     moveToPosition(position);
@@ -146,14 +151,15 @@ public class CagedOgre extends Script implements Painting {
   }
 
   private void moveToPosition(RSTile position) {
-    if (!position.isOnScreen()) {
-      Walking.blindWalkTo(position);
-    }
-    RSTile[] path = Walking.generateStraightScreenPath(position);
-    Walking.walkScreenPath(path);
+    WebWalking.setUseRun(true);
+    WebWalking.setUseAStar(true);
+    while (!Player.getPosition().equals(position))
+      WebWalking.walkTo(position);
     Timer timer = new Timer(700 + rand.nextInt(130));
     timer.reset();
     while (timer.isRunning()) {
+      if (Player.isMoving())
+        timer.reset();
       sleep(100);
     }
     sleep(6000 + rand.nextInt(121));
@@ -244,9 +250,20 @@ public class CagedOgre extends Script implements Painting {
     return 43;
   }
 
+  private float getDuration() {
+    return ((float) (System.currentTimeMillis() - startTime))/(float) 1000;
+  }
+
+
+  private int xpGained(Skills.SKILLS skill) {
+    return Skills.getXP(skill) - startXP;
+  }
 
   public void onPaint(Graphics g) {
+    float duration = getDuration();
+    int xp = xpGained(Skills.SKILLS.RANGED);
     g.setColor(Color.GREEN);
-    g.drawString("CagedOgre", 380, 330);
+    g.drawString("Ranged XP/Hour : " + xp / (duration/3600), 300, 300);
+    g.drawString("Time Running(s) : " + duration, 300, 330);
   }
 }
