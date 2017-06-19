@@ -263,7 +263,8 @@ public class CagedOgre extends Script implements Painting {
     float duration = getDuration();
     int xp = xpGained(Skills.SKILLS.RANGED);
     g.setColor(Color.GREEN);
-    g.drawString("Ranged XP/Hour : " + xp / (duration/3600), 300, 300);
+    g.drawString("Caged Ogres", 300, 300);
+    g.drawString("Ranged XP/Hour : " + xp / (duration/3600), 300, 315);
     g.drawString("Time Running(s) : " + duration, 300, 330);
   }
 }
