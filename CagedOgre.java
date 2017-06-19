@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 // To start: setup cannon and stand on top of it
 
-@ScriptManifest(authors = {"sandniga"}, category = "Private", name = "CagedOgre")
+@ScriptManifest(authors = {"sandniga"}, category = "Ranged", name = "CagedOgre")
 public class CagedOgre extends Script implements Painting {
 
   private Random rand = new Random();
@@ -166,6 +166,10 @@ public class CagedOgre extends Script implements Painting {
   }
 
   private void moveToLoadPosition() {
+    while (!PathFinding.canReach(CANNON_POSITION, false)) {
+      moveToPosition(MIDPOINT);
+      openGate();
+    }
     int index = rand.nextInt(3);
     RSTile position = LOAD_POSITION[index];
     moveToPosition(position);
@@ -263,8 +267,9 @@ public class CagedOgre extends Script implements Painting {
     float duration = getDuration();
     int xp = xpGained(Skills.SKILLS.RANGED);
     g.setColor(Color.GREEN);
-    g.drawString("Caged Ogres", 300, 300);
-    g.drawString("Ranged XP/Hour : " + xp / (duration/3600), 300, 315);
+    g.drawString("Caged Ogres", 300, 285);
+    g.drawString("Ranged XP/Hour : " + xp / (duration/3600), 300, 300);
+    g.drawString("Total XP : " + xp, 300, 315);
     g.drawString("Time Running(s) : " + duration, 300, 330);
   }
 }
