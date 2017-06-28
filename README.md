@@ -2,6 +2,8 @@
 
 Simple script for 07scape (http://oldschool.runescape.com/) whilst making use of the tribot api (https://tribot.org/doc/).
 
+![img](https://i.imgur.com/om73iGB.png)
+
 Writing automated tests for this would be tedious since it would require opening the tribot client, logging into the tribot client, logging into runescape and then loading the script on the tribot client.
 
 
