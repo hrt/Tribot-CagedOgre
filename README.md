@@ -1,7 +1,7 @@
 ### Information
 
-Simple script for 07scape (http://oldschool.runescape.com/) whilst making use of the tribot api (https://tribot.org/doc/).
-Information can also be found https://tribot.org/repository/script/id/2435 and https://tribot.org/forums/topic/72517-open-source-caged-ogres-v1-55k-75k-xph/
+Simple script for 07scape using the tribot api (https://tribot.org/doc/).
+Discussion thread: https://tribot.org/forums/topic/72517-open-source-caged-ogres-v1-55k-75k-xph/
 
 ![img](https://i.imgur.com/om73iGB.png)
 
